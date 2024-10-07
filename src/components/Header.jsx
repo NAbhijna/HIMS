@@ -1,3 +1,5 @@
+// src/components/Header.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +11,8 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-6">
             <li><Link to="/" className="hover:underline">Home</Link></li>
-            <li><Link to="/plan-comparison" className="hover:underline">Plan Comparison</Link></li>
-            <li><Link to="/contact" className="hover:underline">Contact Us</Link></li> {/* New link to Contact Us */}
+            <li><a href="#plans" className="hover:underline">Plans</a></li> {/* Links to plans on the home page */}
+            <li><Link to="/contact" className="hover:underline">Contact</Link></li>
           </ul>
         </nav>
       </div>
