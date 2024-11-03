@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@shadcn/ui": "^0.0.4",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "firebase": "^11.0.1",
     "healthcare-insurance-management-system": "file:",
-    "lucide-react": "^0.451.0",
+    "i": "^0.3.7",
+    "lucide-react": "file:../../components/ui/alert",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",

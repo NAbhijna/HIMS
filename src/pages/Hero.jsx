@@ -1,5 +1,6 @@
 import React from 'react';
-import docImage from '../assets/doc4.svg'; // Importing the SVG image
+import { Link } from 'react-router-dom'; // Import Link for routing
+import docImage from '../assets/doc4.svg'; // Import the SVG image
 
 const Hero = () => {
   return (
@@ -15,9 +16,9 @@ const Hero = () => {
         <p className="text-md mb-8 max-w-xl mx-auto text-gray-600 dark:text-gray-300">
           Our goal is to ensure you and your family receive the highest quality healthcare without the financial burden. From routine check-ups to emergency coverage, our plans are tailored to meet your unique needs.
         </p>
-        <a href="#plans" className="bg-blue-500 dark:bg-green-500 text-white px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:bg-blue-600 dark:hover:bg-green-600">
+        <Link to="/get-quote" className="bg-blue-500 dark:bg-green-500 text-white px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:bg-blue-600 dark:hover:bg-green-600">
           Get a Quote
-        </a>
+        </Link>
       </div>
 
       {/* Image Section */}
@@ -25,7 +26,7 @@ const Hero = () => {
         <img
           src={docImage}
           alt="Health Insurance Illustration"
-          className="w-full lg:max-w-lg rounded-lg "
+          className="w-full lg:max-w-lg rounded-lg"
         />
       </div>
     </section>
