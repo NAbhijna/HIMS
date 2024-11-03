@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const { currentUser, logout } = useAuth(); // Get currentUser and logout from context
 
   useEffect(() => {
     if (isDarkMode) {
@@ -25,8 +27,24 @@ const Header = () => {
             <li><Link to="/" className="hover:text-blue-500 transition-colors">Home</Link></li>
             <li><Link to="/about" className="hover:text-blue-500 transition-colors">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-blue-500 transition-colors">Contact</Link></li>
-            <li><Link to="/login" className="hover:text-blue-500 transition-colors">Login</Link></li>
-            <li><Link to="/signup" className="hover:text-blue-500 transition-colors">Sign Up</Link></li>
+            {!currentUser ? (
+              <>
+                <li><Link to="/login" className="hover:text-blue-500 transition-colors">Login</Link></li>
+                <li><Link to="/signup" className="hover:text-blue-500 transition-colors">Sign Up</Link></li>
+              </>
+            ) : (
+              <li className="relative group">
+                <button className="hover:text-blue-500 transition-colors">
+                  Profile
+                </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-glass-dark shadow-lg rounded-lg py-2 hidden group-hover:block group-focus-within:block">
+                  <p className="px-4 py-2 text-gray-800 dark:text-white">{currentUser.email}</p>
+                  <button onClick={logout} className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                    Sign Out
+                  </button>
+                </div>
+              </li>
+            )}
           </ul>
           <button
             onClick={toggleDarkMode}

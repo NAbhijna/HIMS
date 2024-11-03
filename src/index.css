@@ -16,3 +16,9 @@
   filter: blur(50px); /* Increased blur to enhance the soft fog effect */
   will-change: transform; /* Improve performance during animations */
 }
+
+
+.group:hover .group-hover\:block,
+.group:focus-within .group-hover\:block {
+  display: block;
+}
