@@ -23,29 +23,17 @@ const App = () => {
           <FloatingGradient />
           <Header />
           <Routes>
+            <Route path="/" element={<Hero />} /> {/* Public access */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Hero />
-              </ProtectedRoute>
-            } />
+            <Route path="/about" element={<AboutUs />} /> {/* Public access */}
+            <Route path="/contact" element={<ContactPage />} /> {/* Public access */}
             <Route path="/home" element={
               <ProtectedRoute>
                 <>
                   <Hero />
                   <PlanDetails />
                 </>
-              </ProtectedRoute>
-            } />
-            <Route path="/contact" element={
-              <ProtectedRoute>
-                <ContactPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/about" element={
-              <ProtectedRoute>
-                <AboutUs />
               </ProtectedRoute>
             } />
             <Route path="/get-quote" element={

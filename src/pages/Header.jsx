@@ -28,10 +28,7 @@ const Header = () => {
             <li><Link to="/about" className="hover:text-blue-500 transition-colors">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-blue-500 transition-colors">Contact</Link></li>
             {!currentUser ? (
-              <>
-                <li><Link to="/login" className="hover:text-blue-500 transition-colors">Login</Link></li>
-                <li><Link to="/signup" className="hover:text-blue-500 transition-colors">Sign Up</Link></li>
-              </>
+              <li><Link to="/login" className="hover:text-blue-500 transition-colors">Login</Link></li>
             ) : (
               <li className="relative group">
                 <button className="hover:text-blue-500 transition-colors">
