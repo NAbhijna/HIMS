@@ -1,10 +1,6 @@
 // src/components/PlanDetails.jsx
 
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import React from 'react';
 
 // Define your plans and comparison data here
 const plans = [
@@ -41,25 +37,6 @@ const plans = [
 ];
 
 const PlanDetails = () => {
-  const cardsRef = useRef([]);
-
-  useEffect(() => {
-    cardsRef.current.forEach((card, index) => {
-      gsap.from(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: "top bottom-=100",
-          toggleActions: "play none none reverse"
-        },
-        duration: 0.8,
-        y: 50,
-        opacity: 0,
-        delay: index * 0.2,
-        ease: "power3.out"
-      });
-    });
-  }, []);
-
   return (
     <section id="plans" className="py-20 bg-gray-100 dark:bg-dark-bg">
       <h3 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">Our Plans</h3>
@@ -67,15 +44,11 @@ const PlanDetails = () => {
         {plans.map((plan, index) => (
           <div 
             key={index} 
-            ref={el => cardsRef.current[index] = el}
             className="bg-white dark:bg-glass-light p-6 rounded-lg shadow-md transition-shadow hover:shadow-xl"
           >
             <h4 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">{plan.name}</h4>
             <p className="mb-4 text-gray-600 dark:text-gray-300">{plan.description}</p>
             <p className="font-bold text-lg mb-4 text-blue-600 dark:text-blue-400">{plan.price}</p>
-            <a href="#contact" className="mt-4 bg-blue-500 text-white px-4 py-2 rounded block text-center hover:bg-blue-600 transition-colors">Select Plan</a>
-
-            {/* Comparison Table within the Card */}
             <div className="mt-6">
               <table className="min-w-full bg-transparent text-sm">
                 <thead>

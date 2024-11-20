@@ -1,6 +1,6 @@
 // tailwind.config.js
 module.exports = {
-   darkMode: 'class', // Enables class-based dark mode
+  darkMode: 'class',  // or 'media' if you want to follow system preferences
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',

@@ -43,94 +43,117 @@ app.post('/api/insurance', async (req, res) => {
   try {
     await client.query('BEGIN');
     
-    // Helper function to validate date
-    const isValidDate = (dateString) => {
-      if (!dateString) return false;
-      const date = new Date(dateString);
-      return date instanceof Date && !isNaN(date);
-    };
+    // Log incoming data
+    console.log('Received form data:', JSON.stringify(req.body, null, 2));
 
-    // Validate required dates before insertion
-    if (!isValidDate(req.body.personalInfo.dateOfBirth)) {
-      throw new Error('Date of birth is required and must be valid');
+    // Validate required fields but allow duplicates
+    if (!req.body.personalInfo || !req.body.healthInfo || !req.body.coverage) {
+      throw new Error('Missing required form sections');
     }
 
-    // Continue with your existing insertion logic, but add NULL for optional dates
-    const personalInfoQuery = `
-      INSERT INTO personal_info (first_name, last_name, email, phone, password, date_of_birth, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING person_id
-    `;
+    // Convert empty strings to null for the database
+    const personInfo = {
+      firstName: req.body.personalInfo.firstName || null,
+      lastName: req.body.personalInfo.lastName || null,
+      email: req.body.personalInfo.email || null,
+      phone: req.body.personalInfo.phone || null,
+      dateOfBirth: req.body.personalInfo.dateOfBirth || null,
+      gender: req.body.personalInfo.gender || null,
+      occupation: req.body.personalInfo.occupation || null,
+      incomeRange: req.body.personalInfo.incomeRange || null
+    };
+
+    // Insert Personal Info without unique constraint check
+    const personalInfoResult = await client.query(
+      `INSERT INTO insurance.personal_info 
+       (first_name, last_name, email, phone, date_of_birth, gender, occupation, income_range)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING person_id`,
+      Object.values(personInfo)
+    ).catch(err => {
+      console.error('Error inserting personal info:', err);
+      // Continue with insert even if duplicate
+      throw new Error(`Database error: ${err.message}`);
+    });
     
-    const personalInfoValues = [
-      req.body.personalInfo.firstName,
-      req.body.personalInfo.lastName,
-      req.body.personalInfo.email,
-      req.body.personalInfo.phone,
-      req.body.personalInfo.password,
-      req.body.personalInfo.dateOfBirth,
-      req.body.personalInfo.status
-    ];
-
-    const { personalInfo, address, policy, hospital, disease, test, claim, billing } = req.body;
-
-    // Insert personal information
-    const personalInfoResult = await pool.query(
-      'INSERT INTO personal_info (first_name, last_name, email, phone, password, date_of_birth, status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id',
-      [personalInfo.firstName, personalInfo.lastName, personalInfo.email, personalInfo.phone, personalInfo.password, personalInfo.dateOfBirth, personalInfo.status]
-    );
     const personId = personalInfoResult.rows[0].person_id;
 
-    // Insert address
-    await pool.query(
-      'INSERT INTO address (person_id, street, city, state, pin_code) VALUES ($1, $2, $3, $4, $5)',
-      [personId, address.street, address.city, address.state, address.pinCode]
+    // 2. Insert Address
+    await client.query(
+      `INSERT INTO insurance.address 
+       (person_id, street, city, state, pin_code)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        personId,
+        req.body.address.street,
+        req.body.address.city,
+        req.body.address.state,
+        req.body.address.pinCode
+      ]
     );
 
-    // Insert policy
-    await pool.query(
-      'INSERT INTO policy (person_id, policy_number, policy_type, sum_insured, tenure, premium, start_date, end_date, policy_benefits, medical_history) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-      [personId, policy.policyNumber, policy.policyType, policy.sumInsured, policy.tenure, policy.premium, policy.startDate, policy.endDate, policy.policyBenefits, policy.medicalHistory]
+    // 3. Insert Coverage
+    const coverageResult = await client.query(
+      `INSERT INTO insurance.coverage 
+       (person_id, plan_type, coverage_amount, payment_method, payment_frequency, additional_benefits)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING coverage_id`,
+      [
+        personId,
+        req.body.coverage.planType,
+        req.body.coverage.coverageAmount,
+        req.body.coverage.paymentMethod,
+        req.body.coverage.paymentFrequency,
+        req.body.coverage.additionalBenefits
+      ]
     );
 
-    // Insert hospital
-    await pool.query(
-      'INSERT INTO hospital (name, address, is_networked) VALUES ($1, $2, $3)',
-      [hospital.name, hospital.address, hospital.isNetworked]
-    );
+    const coverageId = coverageResult.rows[0].coverage_id;
 
-    // Insert disease
-    await pool.query(
-      'INSERT INTO disease (name, code, infected_from, diagnosis_date) VALUES ($1, $2, $3, $4)',
-      [disease.name, disease.code, disease.infectedFrom, disease.diagnosisDate]
-    );
+    // 4. Insert Family Members
+    if (req.body.coverage.familyMembers && req.body.coverage.familyMembers.length > 0) {
+      const familyMemberValues = req.body.coverage.familyMembers.map(member => 
+        `(${coverageId}, '${member.name}', '${member.relation}', ${member.age}, '${member.gender}')`
+      ).join(',');
 
-    // Insert test
-    await pool.query(
-      'INSERT INTO test (code, disease_code, price) VALUES ($1, $2, $3)',
-      [test.code, test.diseaseCode, test.price]
-    );
+      await client.query(
+        `INSERT INTO insurance.family_members 
+         (coverage_id, name, relation, age, gender)
+         VALUES ${familyMemberValues}`
+      );
+    }
 
-    // Insert claim
-    await pool.query(
-      'INSERT INTO claim (policy_number, person_id, issued_amount, issued_date, status, claimed_amount) VALUES ($1, $2, $3, $4, $5, $6)',
-      [claim.policyNumber, personId, claim.issuedAmount, claim.issuedDate, claim.status, claim.claimedAmount]
-    );
-
-    // Insert billing
-    await pool.query(
-      'INSERT INTO billing (disease_code, bill_amount, date_of_admission, date_of_discharge) VALUES ($1, $2, $3, $4)',
-      [billing.diseaseCode, billing.billAmount, billing.dateOfAdmission, billing.dateOfDischarge]
+    // 5. Insert Health Info
+    await client.query(
+      `INSERT INTO insurance.health_info 
+       (person_id, height, weight, has_existing_conditions, existing_conditions, 
+        smoking_status, family_history, exercise_frequency, alcohol_consumption, 
+        taking_medications, medications)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      [
+        personId,
+        req.body.healthInfo.height,
+        req.body.healthInfo.weight,
+        req.body.healthInfo.hasExistingConditions,
+        req.body.healthInfo.existingConditions,
+        req.body.healthInfo.smokingStatus,
+        req.body.healthInfo.familyHistory,
+        req.body.healthInfo.exerciseFrequency,
+        req.body.healthInfo.alcoholConsumption,
+        req.body.healthInfo.takingMedications,
+        req.body.healthInfo.medications
+      ]
     );
 
     await client.query('COMMIT');
-    res.json({ success: true, message: 'Data inserted successfully' });
+    res.json({ success: true, message: 'Insurance application submitted successfully' });
   } catch (error) {
     await client.query('ROLLBACK');
+    console.error('Detailed error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Error inserting data', 
-      error: error.message 
+      message: 'Error submitting insurance application', 
+      error: error.message
     });
   } finally {
     client.release();

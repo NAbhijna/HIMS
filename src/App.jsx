@@ -10,10 +10,15 @@ import AboutUs from './pages/AboutUs';
 import Footer from './pages/Footer';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import InsuranceForm from './pages/InsuranceForm';
+import InsuranceFormStep1 from './pages/InsuranceFormStep1';
+import InsuranceFormStep2 from './pages/InsuranceFormStep2';
+import InsuranceFormStep3 from './pages/InsuranceFormStep3';
 import FloatingGradient from './pages/FloatingGradient';
 import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
 import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
+import InsuranceFormContainer from './pages/InsuranceFormContainer'; // Import InsuranceFormContainer
+import Success from './pages/Success'; // Import Success
+import PaymentPage from './pages/PaymentPage'; // Add import
 
 const App = () => {
   return (
@@ -23,7 +28,12 @@ const App = () => {
           <FloatingGradient />
           <Header />
           <Routes>
-            <Route path="/" element={<Hero />} /> {/* Public access */}
+            <Route path="/" element={
+              <>
+                <Hero />
+                <PlanDetails />
+              </>
+            } /> {/* Public access */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/about" element={<AboutUs />} /> {/* Public access */}
@@ -38,7 +48,17 @@ const App = () => {
             } />
             <Route path="/get-quote" element={
               <ProtectedRoute>
-                <InsuranceForm />
+                <InsuranceFormContainer />
+              </ProtectedRoute>
+            } />
+            <Route path="/success" element={
+              <ProtectedRoute>
+                <Success />
+              </ProtectedRoute>
+            } />
+            <Route path="/payment" element={
+              <ProtectedRoute>
+                <PaymentPage />
               </ProtectedRoute>
             } />
           </Routes>
