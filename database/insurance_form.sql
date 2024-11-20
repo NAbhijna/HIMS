@@ -1,3 +1,12 @@
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS billing;
+DROP TABLE IF EXISTS claim;
+DROP TABLE IF EXISTS test;
+DROP TABLE IF EXISTS disease;
+DROP TABLE IF EXISTS hospital;
+DROP TABLE IF EXISTS policy;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS personal_info;
 
 -- Create the database
 CREATE DATABASE insurance_db;
@@ -56,7 +65,7 @@ CREATE TABLE hospital (
 CREATE TABLE disease (
     disease_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    code VARCHAR(20) NOT NULL,
+    code VARCHAR(20) UNIQUE NOT NULL,
     infected_from DATE,
     diagnosis_date DATE
 );
