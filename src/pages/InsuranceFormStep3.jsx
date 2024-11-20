@@ -51,7 +51,7 @@ const InsuranceFormStep3 = ({ formData, handleInputChange, setPage }) => {
 
       if (response.data.success) {
         // Redirect to payment page instead of success
-        navigate('/payment');
+        navigate('/payment', { state: { formData: formattedData } });
       } else {
         throw new Error(response.data.message || 'Submission failed');
       }

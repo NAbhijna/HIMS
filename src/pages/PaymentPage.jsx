@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const formData = location.state?.formData;
   const [loading, setLoading] = useState(false);
 
   const handlePayment = (e) => {
@@ -12,7 +13,7 @@ const PaymentPage = () => {
     // Simulate payment processing
     setTimeout(() => {
       setLoading(false);
-      navigate('/success');
+      navigate('/success', { state: { formData } });
     }, 2000);
   };
 
