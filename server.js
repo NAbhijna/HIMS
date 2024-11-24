@@ -8,7 +8,7 @@ const port = 5000;
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend
+  origin: 'http://localhost:5174', // Allow requests from your frontend
   methods: ['GET', 'POST'], // Allow specific HTTP methods
   allowedHeaders: ['Content-Type'], // Allow specific headers
 }));

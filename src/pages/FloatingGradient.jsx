@@ -1,6 +1,5 @@
-// src/components/FloatingGradient.jsx
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const FloatingGradient = () => {
   const gradientRef = useRef(null);

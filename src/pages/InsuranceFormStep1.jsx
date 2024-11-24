@@ -1,6 +1,19 @@
 import React from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const InsuranceFormStep1 = ({ formData, handleInputChange, setPage }) => {
+  const { currentUser } = useAuth();
+  
+  // Auto-fill user data when component mounts
+  React.useEffect(() => {
+    if (currentUser) {
+      const [firstName, lastName] = (currentUser.displayName || '').split(' ');
+      handleInputChange('personalInfo', 'firstName', firstName || '');
+      handleInputChange('personalInfo', 'lastName', lastName || '');
+      handleInputChange('personalInfo', 'email', currentUser.email || '');
+    }
+  }, [currentUser]);
+
   return (
     <section className="max-w-2xl mx-auto bg-white dark:bg-glass-light p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Tell us about yourself</h2>

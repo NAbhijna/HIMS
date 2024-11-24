@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 
@@ -27,8 +27,10 @@ const Header = () => {
 
   return (
     <header className="bg-white dark:bg-glass-dark backdrop-blur-md text-gray-800 dark:text-white p-4 shadow-lg sticky top-0 z-50 transition-colors duration-300">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Health Insurance Management</h1>
+      <div className="flex justify-between items-center">
+        <Link to="/" className="text-2xl font-bold hover:text-blue-500 transition-colors">
+          Health Insurance Management
+        </Link>
         <nav className="flex items-center">
           <ul className="flex space-x-6 mr-6">
             <li><Link to="/" className="hover:text-blue-500 transition-colors">Home</Link></li>
@@ -45,7 +47,7 @@ const Header = () => {
                   Profile
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-glass-dark shadow-lg rounded-lg py-2 hidden group-hover:block group-focus-within:block">
-                  <p className="px-4 py-2 text-gray-800 dark:text-white">{currentUser.email}</p>
+                  <p className="px-4 py-2 text-gray-800 dark:text-white">{currentUser.displayName}</p>
                   <button
                     onClick={logout}
                     className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"

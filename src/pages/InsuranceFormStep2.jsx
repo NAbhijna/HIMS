@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const InsuranceFormStep2 = ({ formData, handleInputChange, setPage }) => {
   const [familyMembers, setFamilyMembers] = useState(formData.coverage.familyMembers || []);
