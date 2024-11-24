@@ -2,7 +2,7 @@ import React from 'react';
 
 const InsuranceFormStep1 = ({ formData, handleInputChange, setPage }) => {
   return (
-    <section className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+    <section className="max-w-2xl mx-auto bg-white dark:bg-glass-light p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Tell us about yourself</h2>
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
