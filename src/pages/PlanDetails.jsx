@@ -17,7 +17,7 @@ const plans = [
   {
     id: "standard",
     name: "Standard Plan",
-    description: "Comprehensive coverage with additional benefits.",
+    description: "Comprehensive coverage with benefits.",
     price: "₹16,000/month",
     comparison: [
       { feature: "Doctor Visits", coverage: "Full", additionalInfo: "Unlimited visits" },
@@ -42,7 +42,7 @@ const PlanDetails = () => {
   const navigate = useNavigate();
 
   const handleSelectPlan = (plan) => {
-    navigate("/insurance-form", { state: { selectedPlan: plan } });
+    navigate("/get-quote", { state: { selectedPlan: plan } });
   };
 
   return (
@@ -52,8 +52,7 @@ const PlanDetails = () => {
         {plans.map((plan, index) => (
           <div
             key={index}
-            className="bg-white dark:bg-glass-light p-6 rounded-lg shadow-md transition-shadow hover:shadow-xl cursor-pointer"
-            onClick={() => handleSelectPlan(plan)}
+            className="bg-white dark:bg-glass-light p-6 rounded-lg shadow-md transition-transform transform hover:translate-y-[-10px] hover:shadow-xl cursor-pointer"
           >
             <h4 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">{plan.name}</h4>
             <p className="mb-4 text-gray-600 dark:text-gray-300">{plan.description}</p>
@@ -77,6 +76,15 @@ const PlanDetails = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Add a Select Plan button */}
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => handleSelectPlan(plan)}
+                className="px-6 py-2 mb-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+              >
+                Select Plan
+              </button>
             </div>
           </div>
         ))}
