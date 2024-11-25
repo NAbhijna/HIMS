@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 const InsuranceFormStep2 = ({ formData, handleInputChange, setPage }) => {
   const [familyMembers, setFamilyMembers] = useState(formData.coverage.familyMembers || []);
+  const [errors, setErrors] = useState({});
 
   const addFamilyMember = () => {
     setFamilyMembers([...familyMembers, { name: '', relation: '', age: '', gender: '' }]);
@@ -23,6 +24,29 @@ const InsuranceFormStep2 = ({ formData, handleInputChange, setPage }) => {
     const updatedMembers = familyMembers.filter((_, i) => i !== index);
     setFamilyMembers(updatedMembers);
     handleInputChange('coverage', 'familyMembers', updatedMembers);
+  };
+
+  const handleBenefitChange = (benefit, isChecked) => {
+    let updatedBenefits = formData.coverage.additionalBenefits || [];
+
+    if (isChecked) {
+      if (benefit === 'Maternity Cover' && formData.personalInfo.gender !== 'female') {
+        setErrors({
+          ...errors,
+          benefits: 'Maternity Cover can only be selected by female applicants'
+        });
+        return;
+      }
+      updatedBenefits = [...updatedBenefits, benefit.toLowerCase()];
+    } else {
+      updatedBenefits = updatedBenefits.filter(b => b !== benefit.toLowerCase());
+    }
+
+    setErrors({
+      ...errors,
+      benefits: null
+    });
+    handleInputChange('coverage', 'additionalBenefits', updatedBenefits);
   };
 
   return (
@@ -76,19 +100,16 @@ const InsuranceFormStep2 = ({ formData, handleInputChange, setPage }) => {
                 <input
                   type="checkbox"
                   checked={formData.coverage.additionalBenefits?.includes(benefit.toLowerCase())}
-                  onChange={(e) => {
-                    const benefits = formData.coverage.additionalBenefits || [];
-                    const updatedBenefits = e.target.checked
-                      ? [...benefits, benefit.toLowerCase()]
-                      : benefits.filter(b => b !== benefit.toLowerCase());
-                    handleInputChange('coverage', 'additionalBenefits', updatedBenefits);
-                  }}
+                  onChange={(e) => handleBenefitChange(benefit, e.target.checked)}
                   className="w-4 h-4 text-blue-600"
                 />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{benefit}</span>
               </label>
             ))}
           </div>
+          {errors.benefits && (
+            <p className="text-red-500 text-sm mt-1">{errors.benefits}</p>
+          )}
         </div>
 
         {/* Add Payment Preference */}
