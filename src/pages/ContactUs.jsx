@@ -2,57 +2,57 @@ import React from 'react';
 
 const offices = [
   {
-    name: "Kolkata Regional Office I",
+    name: "Bangalore Regional Office I",
     code: "100000",
-    address: "Fifth Floor, National Insurance Building, 8, India Exchange Place, Kolkata, Kolkata, West Bengal, 700001",
+    address: "Fifth Floor, National Insurance Building, 8, India Exchange Place, Bangalore, Bangalore, Karnataka, 700001",
     email: "100000@nic.co.in"
   },
   {
-    name: "Kolkata CBO Unit",
+    name: "Bangalore CBO Unit",
     code: "100100",
-    address: "Kolkata Corporate Cell, Premises No. 18-0374, Plot No. CBD -81, Rear Building, 3rd Floor, New Town, Kolkata, West Bengal, 700156",
+    address: "Bangalore Corporate Cell, Premises No. 18-0374, Plot No. CBD -81, Rear Building, 3rd Floor, New Town, Bangalore, Karnataka, 700156",
     email: "100100@nic.co.in"
   },
   {
     name: "Taratala Business Office",
     code: "100200",
-    address: "4th Floor, Jeevan Tara Building, 23A/44X, Diamond Harbour Road, Taratala, Kolkata, Kolkata, West Bengal, 700053",
+    address: "4th Floor, Jeevan Tara Building, 23A/44X, Diamond Harbour Road, Taratala, Bangalore, Bangalore, Karnataka, 700053",
     email: "100200@nic.co.in"
   },
   {
-    name: "Kolkata Business Office III",
+    name: "Bangalore Business Office III",
     code: "100300",
-    address: "Ground Floor, National Insurance Building, 8, India Exchange Place, Kolkata, Kolkata, West Bengal, 700001",
+    address: "Ground Floor, National Insurance Building, 8, India Exchange Place, Bangalore, Bangalore, Karnataka, 700001",
     email: "100300@nic.co.in"
   },
   {
-    name: "Kolkata Business Office IV",
+    name: "Bangalore Business Office IV",
     code: "100400",
-    address: "Second Floor, Royal Insurance Building, 5, Netaji Subhas Road, Kolkata, Kolkata, West Bengal, 700001",
+    address: "Second Floor, Royal Insurance Building, 5, Netaji Subhas Road, Bangalore, Bangalore, Karnataka, 700001",
     email: "100400@nic.co.in"
   },
   {
-    name: "Kolkata Business Office VI",
+    name: "Bangalore Business Office VI",
     code: "100600",
-    address: "First Floor, National Insurance Building, 8, India Exchange Place, Kolkata, Kolkata, West Bengal, 700001",
+    address: "First Floor, National Insurance Building, 8, India Exchange Place, Bangalore, Bangalore, Karnataka, 700001",
     email: "100600@nic.co.in"
   },
   {
-    name: "Kolkata Business Office VII",
+    name: "Bangalore Business Office VII",
     code: "100700",
-    address: "Fourth Floor, Brooke House, 9, Shakespeare Sarani, Kolkata, Kolkata, West Bengal, 700071",
+    address: "Fourth Floor, Brooke House, 9, Shakespeare Sarani, Bangalore, Bangalore, Karnataka, 700071",
     email: "100700@nic.co.in"
   },
   {
     name: "Dunlop Bridge Business Office",
     code: "100800",
-    address: "298, Ashokegarh, Dunlop Bridge, Kolkata, Kolkata, West Bengal, 700108",
+    address: "298, Ashokegarh, Dunlop Bridge, Bangalore, Bangalore, Karnataka, 700108",
     email: "100800@nic.co.in"
   },
   {
-    name: "Kolkata Business Office IX",
+    name: "Bangalore Business Office IX",
     code: "100900",
-    address: "Third Floor, Ruby House, National Insurance Building, 8, India Exchange Place, Kolkata, Kolkata, West Bengal, 700001",
+    address: "Third Floor, Ruby House, National Insurance Building, 8, India Exchange Place, Bangalore, Bangalore, Karnataka, 700001",
     email: "100900@nic.co.in"
   }
 ];

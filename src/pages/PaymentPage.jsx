@@ -6,6 +6,8 @@ const PaymentPage = () => {
   const location = useLocation();
   const formData = location.state?.formData;
   const [loading, setLoading] = useState(false);
+  const [cardNumber, setCardNumber] = useState('');
+  const [cvv, setCvv] = useState('');
 
   const handlePayment = (e) => {
     e.preventDefault();
@@ -15,6 +17,14 @@ const PaymentPage = () => {
       setLoading(false);
       navigate('/success', { state: { formData } });
     }, 2000);
+  };
+
+  const maskCardNumber = (number) => {
+    return number.replace(/\d(?=\d{4})/g, '*');
+  };
+
+  const maskCvv = (cvv) => {
+    return cvv.replace(/\d/g, '*');
   };
 
   const renderPaymentFields = () => {
@@ -38,6 +48,8 @@ const PaymentPage = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Card Number</label>
               <input
                 type="text"
+                value={maskCardNumber(cardNumber)}
+                onChange={(e) => setCardNumber(e.target.value)}
                 placeholder="1234 5678 9012 3456"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 required
@@ -57,6 +69,8 @@ const PaymentPage = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">CVV</label>
                 <input
                   type="text"
+                  value={maskCvv(cvv)}
+                  onChange={(e) => setCvv(e.target.value)}
                   placeholder="123"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   required

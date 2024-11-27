@@ -83,6 +83,8 @@ const AdminPanel = () => {
   const [error, setError] = useState(null);
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredRecords, setFilteredRecords] = useState([]);
 
   const tables = [
     'personal_info',
@@ -108,6 +110,22 @@ const AdminPanel = () => {
     }
     fetchRecords();
   }, [selectedTable, isAdmin, navigate]);
+
+  useEffect(() => {
+    // Filter records based on search term
+    if (searchTerm.trim() === '') {
+      setFilteredRecords(records);
+      return;
+    }
+
+    const searchValue = searchTerm.toLowerCase();
+    const filtered = records.filter(record => 
+      Object.values(record).some(value => 
+        value && value.toString().toLowerCase().includes(searchValue)
+      )
+    );
+    setFilteredRecords(filtered);
+  }, [searchTerm, records]);
 
   const fetchRecords = async () => {
     setLoading(true);
@@ -157,25 +175,55 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg">
       <div className="h-screen flex flex-col">
-        {/* Header Section - Fixed height */}
+        {/* Header Section */}
         <div className="bg-white dark:bg-glass-dark shadow-sm p-6">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h2>
-            <select
-              value={selectedTable}
-              onChange={(e) => setSelectedTable(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-glass-light text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-            >
-              {tables.map(table => (
-                <option key={table} value={table}>
-                  {table.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                </option>
-              ))}
-            </select>
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h2>
+              <div className="flex items-center gap-4 w-full md:w-auto">
+                {/* Search Input */}
+                <div className="relative flex-1 md:w-64">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search records..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg 
+                      bg-white dark:bg-glass-light text-gray-900 dark:text-white 
+                      focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 
+                        text-gray-500 hover:text-gray-700"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+                {/* Table Selector */}
+                <select
+                  value={selectedTable}
+                  onChange={(e) => setSelectedTable(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg 
+                    bg-white dark:bg-glass-light text-gray-900 dark:text-white 
+                    focus:ring-2 focus:ring-blue-500"
+                >
+                  {tables.map(table => (
+                    <option key={table} value={table}>
+                      {table.split('_').map(word => 
+                        word.charAt(0).toUpperCase() + word.slice(1)
+                      ).join(' ')}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Error Message - Conditional render */}
+        {/* Error Message */}
         {error && (
           <div className="max-w-7xl mx-auto px-4 py-2">
             <div className="bg-red-50 dark:bg-red-900/50 border-l-4 border-red-500 p-4 rounded-lg">
@@ -189,7 +237,7 @@ const AdminPanel = () => {
           </div>
         )}
 
-        {/* Main Content - Flexible height */}
+        {/* Main Content */}
         <div className="flex-1 overflow-hidden">
           <div className="h-full overflow-auto px-4 py-2">
             <div className="bg-white dark:bg-glass-dark rounded-xl shadow-sm h-full">
@@ -197,7 +245,7 @@ const AdminPanel = () => {
                 <div className="flex justify-center items-center h-full">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
                 </div>
-              ) : (
+              ) : filteredRecords.length > 0 ? (
                 <div className="overflow-x-auto h-full">
                   <table className="w-full">
                     <thead className="sticky top-0 bg-gray-50 dark:bg-glass-light z-10">
@@ -213,7 +261,7 @@ const AdminPanel = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {records.map((record) => (
+                      {filteredRecords.map((record) => (
                         <tr key={record.id || record.person_id || record.coverage_id} 
                             className="hover:bg-gray-50 dark:hover:bg-glass-light transition-colors">
                           {Object.values(record).map((value, index) => (
@@ -241,6 +289,10 @@ const AdminPanel = () => {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              ) : (
+                <div className="flex justify-center items-center h-full text-gray-500 dark:text-gray-400">
+                  {searchTerm ? 'No matching records found' : 'No records available'}
                 </div>
               )}
             </div>
