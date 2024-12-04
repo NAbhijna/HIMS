@@ -46,7 +46,7 @@ const PlanDetails = () => {
   };
 
   return (
-    <section id="plans" className="py-20 bg-gray-100 dark:bg-dark-bg">
+    <section id="plans" className="py-20 bg-gray-100 dark:bg-glass-dark">
       <h3 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">Our Plans</h3>
       <div className="container mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         {plans.map((plan, index) => (

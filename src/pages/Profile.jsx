@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   getAuth,
   onAuthStateChanged,
@@ -6,6 +6,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../context/AuthContext'; // Add this import
 
 const ProfilePage = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -16,6 +17,7 @@ const ProfilePage = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
+  const { logout } = useAuth(); // Add this line
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -69,9 +71,19 @@ const ProfilePage = () => {
       });
   };
 
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error("Error signing out:", error);
+      alert("Failed to sign out. Please try again.");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-bg text-gray-800 dark:text-white transition-colors duration-300">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-glass-dark text-gray-800 dark:text-white transition-colors duration-300">
+      <div className="w-full max-w-md bg-white dark:bg-glass-dark shadow-lg rounded-lg p-8">
         <div className="flex flex-col items-center mb-6">
           {/* Avatar Section */}
           <div className="relative mb-4">
@@ -145,6 +157,16 @@ const ProfilePage = () => {
             className="text-blue-500 hover:text-blue-700"
           >
             Forgot Password?
+          </button>
+        </div>
+
+        {/* Add Sign Out Button - place before the last closing div */}
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleSignOut}
+            className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Sign Out
           </button>
         </div>
       </div>

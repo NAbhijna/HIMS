@@ -6,8 +6,10 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  updateProfile
 } from 'firebase/auth';
-import { auth } from '../firebase'; // Ensure this path is correct
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Ensure this path is correct
 import { useNavigate, Link } from 'react-router-dom';
 
 const SignUp = () => {
@@ -15,6 +17,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -26,6 +29,12 @@ const SignUp = () => {
       // Attempt to create a new account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+
+      // Set admin status in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        isAdmin: isAdmin
+      });
 
       // Send email verification
       await sendEmailVerification(user);
@@ -95,6 +104,16 @@ const SignUp = () => {
           className="w-full p-3 mb-4 border rounded dark:bg-gray-800 dark:text-white"
           required
         />
+        <div className="flex items-center mb-4">
+          <input
+            type="checkbox"
+            id="isAdmin"
+            checked={isAdmin}
+            onChange={(e) => setIsAdmin(e.target.checked)}
+            className="mr-2"
+          />
+          <label htmlFor="isAdmin">Register as Admin</label>
+        </div>
         <button type="submit" className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600">
           Sign Up
         </button>

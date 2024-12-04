@@ -20,6 +20,7 @@ import InsuranceFormContainer from './pages/InsuranceFormContainer'; // Import I
 import Success from './pages/Success'; // Import Success
 import PaymentPage from './pages/PaymentPage'; // Add import
 import Profile from './pages/Profile';
+import AdminPanel from './components/AdminPanel'; // Import AdminPanel
 
 const App = () => {
   return (
@@ -63,6 +64,11 @@ const App = () => {
             <Route path="/payment" element={
               <ProtectedRoute>
                 <PaymentPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminPanel />
               </ProtectedRoute>
             } />
           </Routes>
